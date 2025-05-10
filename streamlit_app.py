@@ -41,7 +41,9 @@ else:
     watermark_size = 15
 
 st.markdown("---")
-st.subheader("Filters and Image Edits")watermark_margin = 4  # fixed margin that looks good by default
+st.markdown("---")
+st.subheader("Filters and Image Edits")
+watermark_margin = 4  # fixed margin that looks good by default
 
 apply_bw = st.checkbox("Apply black & white filter")
 apply_contrast = st.checkbox("Boost contrast")
