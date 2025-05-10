@@ -30,14 +30,15 @@ if preset == "Custom":
     duration = st.slider("Frame display time (seconds)", min_value=0.5, max_value=5.0, value=1.5, step=0.1)
     output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0)
 
+
+st.markdown("---")
+st.subheader("Filters and Image Edits")
 add_watermark = st.checkbox("Add TWNTY-TWO logo watermark", value=True)
 if preset == "Custom":
     watermark_size = st.slider("Watermark size (% of image width)", 5, 30, 15)
 else:
     watermark_size = 15
 
-st.markdown("---")
-st.subheader("Filters and Image Edits")
 watermark_margin = 4  # fixed margin that looks good by default
 
 apply_bw = st.checkbox("Apply black & white filter")
