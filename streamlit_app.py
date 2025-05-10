@@ -149,8 +149,7 @@ if uploaded_files:
                 st.image(output_path, caption="Preview", use_container_width=True)
             else:
                 st.video(output_path)
-                if st.button("🔁 Replay Video"):
-                    st.video(output_path)
+                
 
             with open(output_path, "rb") as f:
                 st.download_button(f"Download {output_format}", f, file_name=os.path.basename(output_path), mime=mime)
