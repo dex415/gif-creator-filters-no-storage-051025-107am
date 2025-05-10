@@ -31,7 +31,6 @@ if preset == "Custom":
     output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0)
 
 
-st.markdown("---")
 st.subheader("Filters and Image Edits")
 add_watermark = st.checkbox("Add TWNTY-TWO logo watermark", value=True)
 if preset == "Custom":
