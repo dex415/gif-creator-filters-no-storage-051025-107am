@@ -64,21 +64,11 @@ if uploaded_files:
     col1, col2 = st.columns([1, 5])
     with col1:
         if st.button("Select All"):
-            for i, fname in enumerate(ordered_filenames):
+            for i, fname in enumerate(file_dict.keys()):
                 st.session_state[f"confirm_remove_{i}"] = False
         if st.button("Clear All"):
-            for i, fname in enumerate(ordered_filenames):
+            for i, fname in enumerate(file_dict.keys()):
                 st.session_state[f"confirm_remove_{i}"] = True
-        confirm_key = f"confirm_remove_{i}"
-        if st.session_state.get(confirm_key):
-            continue
-
-        trash_clicked = st.button("🗑️", key=f"trash_{i}", help=f"Click to mark {fname} for removal")
-        if trash_clicked:
-            if st.confirm(f"Are you sure you want to remove '{fname}'?"):
-                st.session_state[confirm_key] = True
-                continue
-            st.warning(f"Could not display preview for: {fname}")
 
     if st.button("Create Output"):
         with tempfile.TemporaryDirectory() as tmpdir:
