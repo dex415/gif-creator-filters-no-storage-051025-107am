@@ -139,8 +139,8 @@ if uploaded_files:
                     w_percent = logo_width / float(logo.size[0])
                     logo_height = int(float(logo.size[1]) * w_percent)
                     logo = logo.resize((logo_width, logo_height), Image.LANCZOS)
-                    pos_x = img_cropped.width - logo_width - watermark_margin
-                    pos_y = img_cropped.height - logo_height - watermark_margin
+                    pos_x = img_cropped.width - logo_width - (watermark_margin // 2)
+                    pos_y = img_cropped.height - logo_height - (watermark_margin // 2)
                     img_cropped.paste(logo, (pos_x, pos_y), logo)
 
                 images.append(img_cropped)
@@ -166,3 +166,4 @@ if uploaded_files:
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by <a href='https://masvida.agency' target='_blank' style='color: #777; text-decoration: none;'>🏵 Más Vida Agency 🏵 for TWNTY-TWO®️ </a></div>", unsafe_allow_html=True)
+
