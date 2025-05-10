@@ -37,7 +37,7 @@ if preset == "Custom":
 
 add_watermark = st.checkbox("Add TWNTY-TWO logo watermark", value=True)
 watermark_size = st.slider("Watermark size (% of image width)", 5, 30, 15)
-watermark_margin = st.slider("Watermark margin (px)", 0, 50, 10)
+watermark_margin = 4  # fixed margin that looks good by default
 
 apply_bw = st.checkbox("Apply black & white filter")
 apply_contrast = st.checkbox("Boost contrast")
@@ -139,7 +139,7 @@ if uploaded_files:
                     w_percent = logo_width / float(logo.size[0])
                     logo_height = int(float(logo.size[1]) * w_percent)
                     logo = logo.resize((logo_width, logo_height), Image.LANCZOS)
-                    pos_x = img_cropped.width - logo_width - (watermark_margin // 2)
+                    pos_x = img_cropped.width - logo_width - watermark_margin
                     pos_y = img_cropped.height - logo_height - (watermark_margin // 2)
                     img_cropped.paste(logo, (pos_x, pos_y), logo)
 
@@ -166,4 +166,3 @@ if uploaded_files:
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by <a href='https://masvida.agency' target='_blank' style='color: #777; text-decoration: none;'>🏵 Más Vida Agency 🏵 for TWNTY-TWO®️ </a></div>", unsafe_allow_html=True)
-
