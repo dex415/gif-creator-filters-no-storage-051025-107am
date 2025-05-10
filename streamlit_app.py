@@ -139,11 +139,22 @@ if uploaded_files:
                 mime = "image/gif"
             else:
                 output_path = os.path.join(tmpdir, f"twnty_two_hat_{timestamp}.mp4")
-                clip = ImageSequenceClip([img for img in images], fps=1 / duration)
+                import numpy as np
+                clip = ImageSequenceClip([np.array(img) for img in images], fps=1 / duration)
                 clip.write_videofile(output_path, codec="libx264", audio=False, verbose=False, logger=None)
                 mime = "video/mp4"
 
             st.success(f"{output_format} created!")
+            if output_format == "GIF":
+                st.image(output_path, caption="Preview", use_column_width=True)
+                with open(output_path, "rb") as gif_file:
+                    if st.button("🔁 Replay GIF"):
+                        st.image(gif_file, caption="Replay", use_column_width=True)
+            else:
+                st.video(output_path)
+                if st.button("🔁 Replay Video"):
+                    st.video(output_path)
+
             with open(output_path, "rb") as f:
                 st.download_button(f"Download {output_format}", f, file_name=os.path.basename(output_path), mime=mime)
 
