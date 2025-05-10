@@ -70,7 +70,7 @@ if uploaded_files:
         st.stop()
 
     st.markdown("**Drag images to sort their order:**")
-    ordered_filenames = sort_items(list(file_dict.keys()), n_items=5, height=275)
+    ordered_filenames = sort_items(list(file_dict.keys()))
     
 
     if st.button("Create Output"):
