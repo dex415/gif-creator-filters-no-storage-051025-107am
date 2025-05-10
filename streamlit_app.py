@@ -64,14 +64,7 @@ if uploaded_files:
 
     st.markdown("**Drag images to sort their order:**")
     ordered_filenames = sort_items(list(file_dict.keys()))
-    col1, col2 = st.columns([1, 5])
-    with col1:
-        if st.button("Select All"):
-            for i, fname in enumerate(file_dict.keys()):
-                st.session_state[f"confirm_remove_{i}"] = False
-        if st.button("Clear All"):
-            for i, fname in enumerate(file_dict.keys()):
-                st.session_state[f"confirm_remove_{i}"] = True
+    
 
     if st.button("Create Output"):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -149,4 +142,3 @@ if uploaded_files:
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by <a href='https://masvida.agency' target='_blank' style='color: #777; text-decoration: none;'>🏵 Más Vida Agency 🏵 for TWNTY-TWO®️ </a></div>", unsafe_allow_html=True)
-
