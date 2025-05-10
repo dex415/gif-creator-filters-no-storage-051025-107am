@@ -18,7 +18,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.image("https://twnty-two-assets.s3.amazonaws.com/twnty-two-logo-header.png", width=200)
 st.title("🧢 TWNTY-TWO GIF Creator")
 
 preset = st.selectbox("🎛️ Choose a preset", ["GIF (Short Reel)", "MP4 (Longer Reel)", "Custom"])
@@ -66,13 +65,6 @@ if uploaded_files:
     with col1:
         if st.button("Select All"):
             for i, fname in enumerate(ordered_filenames):
-                st.session_state[f"confirm_remove_{i}"] = False
-        if st.button("Clear All"):
-            for i, fname in enumerate(ordered_filenames):
-                st.session_state[f"confirm_remove_{i}"] = True
-    ordered_filenames = sort_items(list(file_dict.keys()))
-
-    for i, fname in enumerate(ordered_filenames):
         confirm_key = f"confirm_remove_{i}"
         if st.session_state.get(confirm_key):
             continue
@@ -82,24 +74,6 @@ if uploaded_files:
             if st.confirm(f"Are you sure you want to remove '{fname}'?"):
                 st.session_state[confirm_key] = True
                 continue
-
-        try:
-            image = Image.open(file_dict[fname]).convert("RGB")
-            image.thumbnail((150, 150))
-            image_bytes = io.BytesIO()
-            image.save(image_bytes, format="JPEG")
-            image_base64 = image_bytes.getvalue().hex()
-            st.markdown(f"""
-<div style='display: inline-block; text-align: center; margin: 10px;'>
-    <div style='position:relative; display:inline-block; max-width: 100%; cursor: pointer;'>
-        <img src='data:image/jpeg;base64,{image_base64}' width='150' style='border:2px solid #ccc; border-radius:4px; transition: transform 0.3s; object-fit: cover; height: 150px;' onmouseover='this.style.transform=\"scale(1.2)\"' onmouseout='this.style.transform=\"scale(1)\"'/>
-        <div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px;'>🗑️</div>
-        <div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>
-    </div>
-    <div style='margin-top: 6px; font-size: 0.8rem; color: #444;'>{fname}</div>
-</div>
-""", unsafe_allow_html=True)
-        except UnidentifiedImageError:
             st.warning(f"Could not display preview for: {fname}")
 
     if st.button("Create Output"):
