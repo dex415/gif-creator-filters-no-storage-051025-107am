@@ -8,7 +8,7 @@ from moviepy.editor import ImageSequenceClip
 from datetime import datetime
 from streamlit_sortables import sort_items
 
-st.set_page_config(page_title="🧢 TWNTY-TWO GIF Creator", layout="centered")
+st.set_page_config(page_title="TWNTY-TWO GIF Creator", layout="centered")
 
 st.markdown("""
     <style>
@@ -19,7 +19,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.image("https://twnty-two-assets.s3.amazonaws.com/twnty-two-icon.png", width=100)
-st.title("🧢 TWNTY-TWO GIF Creator")
+st.title("TWNTY-TWO GIF Creator")
 st.markdown("""
 ### Level Up Your Drops
 Create looping visuals for your Friday and 22nd drops in seconds.
