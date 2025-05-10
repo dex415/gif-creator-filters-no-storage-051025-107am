@@ -97,12 +97,18 @@ if uploaded_files:
             image_bytes = io.BytesIO()
             image.save(image_bytes, format="JPEG")
             image_base64 = image_bytes.getvalue().hex()
-            st.markdown(f"""
-                <div style='position:relative; display:inline-block; max-width: 100%; cursor: pointer;' onclick=\"const i = new Image(); i.src = 'data:image/jpeg;base64,{image_base64}'; const w = window.open(); w.document.write(i.outerHTML);\">
-                    <img src='data:image/jpeg;base64,{image_base64}' width='150' style='border:2px solid #ccc; border-radius:4px; transition: transform 0.3s; display:block; margin:0 auto;' onmouseover='this.style.transform=\"scale(1.2)\"' onmouseout='this.style.transform=\"scale(1)\"'/>
-                    <div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px; cursor:pointer;'>🗑️</div>
-                    <div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>
-                </div>""", unsafe_allow_html=True)"
+            image = image.convert("RGB").resize((150, 150))
+image_bytes = io.BytesIO()
+image.save(image_bytes, format="JPEG")
+image_base64 = image_bytes.getvalue().hex()
+
+st.markdown(f"""
+    <div style='position:relative; display:inline-block; max-width: 100%; cursor: pointer;'>
+        <img src='data:image/jpeg;base64,{image_base64}' width='150' style='border:2px solid #ccc; border-radius:4px; transition: transform 0.3s; display:block; margin:0 auto;' onmouseover='this.style.transform="scale(1.2)"' onmouseout='this.style.transform="scale(1)"'/>
+        <div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px; cursor:pointer;'>🗑️</div>
+        <div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>
+    </div>
+""", unsafe_allow_html=True)"
                     except UnidentifiedImageError:
             st.markdown(f"<div style='position:relative; display:inline-block;'>"
                         f"<div style='width:150px; height:150px; background:#fdd; display:flex; align-items:center; justify-content:center; border:2px solid #f00; border-radius:4px;'>"
