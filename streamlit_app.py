@@ -8,7 +8,7 @@ from moviepy.editor import ImageSequenceClip
 from datetime import datetime
 from streamlit_sortables import sort_items
 
-st.set_page_config(page_title="🧢 TWNTY-TWO GIF Creator", layout="centered")
+st.set_page_config(page_title="🧢 TWNTY-TWO GIF Creator", layout="centered", page_icon="https://twnty-two-assets.s3.amazonaws.com/twnty-two-logo-header.png")
 
 st.markdown("""
     <style>
@@ -18,10 +18,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.image("https://twnty-two-assets.s3.amazonaws.com/twnty-two-icon.png", width=100)
+st.image("https://twnty-two-assets.s3.amazonaws.com/twnty-two-logo-header.png", width=200)
 st.title("🧢 TWNTY-TWO GIF Creator")
 
-preset = st.selectbox("🎛️ Choose a preset", ["Custom", "GIF (Short Reel)", "MP4 (Longer Reel)"])
+preset = st.selectbox("🎛️ Choose a preset", ["GIF (Short Reel)", "MP4 (Longer Reel)", "Custom"])
 if preset == "GIF (Short Reel)":
     duration = 1.5
     output_format = "GIF"
@@ -162,4 +162,5 @@ if uploaded_files:
                 st.download_button(f"Download {output_format}", f, file_name=os.path.basename(output_path), mime=mime)
 
 st.markdown("---")
-st.markdown("Want to publish this on social media? Copy your download and [head to Meta Creator Studio](https://business.facebook.com/creatorstudio) to share to Instagram or Threads.")
+st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by TWNTY-TWO®️</div>", unsafe_allow_html=True)
+st.markdown("Want to publish this on social media? Copy your download and [head to Meta Creator Studio](https://business.facebook.com/creatorstudio) to share to Instagram or Threads.") to share to Instagram or Threads.")
