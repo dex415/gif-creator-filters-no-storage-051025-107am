@@ -20,12 +20,21 @@ st.markdown("""
 
 st.image("https://twnty-two-assets.s3.amazonaws.com/twnty-two-icon.png", width=100)
 st.title("🧢 TWNTY-TWO GIF Creator")
-st.markdown("""
-### Level Up Your Drops
-Create looping visuals for your Friday and 22nd drops in seconds.
-""")
+
+
+preset = st.selectbox("🎛️ Choose a preset", ["Custom", "GIF (Short Reel)", "MP4 (Longer Reel)"])
+if preset == "GIF (Short Reel)":
+    duration = 1.5
+    output_format = "GIF"
+elif preset == "MP4 (Longer Reel)":
+    duration = 2.2
+    output_format = "MP4 (video)"
 
 uploaded_files = st.file_uploader("Drag and drop or browse to upload images", accept_multiple_files=True, type=["png", "jpg", "jpeg"])
+
+if preset == "Custom":
+    duration = st.slider("Frame display time (seconds)", min_value=0.5, max_value=5.0, value=1.5, step=0.1)
+    output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0)
 
 preset = st.selectbox("🎛️ Choose a preset", ["GIF (Short Reel)", "MP4 (Longer Reel)"])
 if preset == "GIF (Short Reel)":
@@ -35,9 +44,6 @@ elif preset == "MP4 (Longer Reel)":
     duration = 2.2
     output_format = "MP4 (video)"
 
-st.markdown("---")
-duration = st.slider("Frame display time (seconds)", min_value=0.5, max_value=5.0, value=duration, step=0.1)
-output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0 if output_format == "GIF" else 1)
 
 add_watermark = st.checkbox("Add TWNTY-TWO logo watermark", value=True)
 watermark_size = st.slider("Watermark size (% of image width)", 5, 30, 15)
@@ -87,10 +93,16 @@ if uploaded_files:
                 continue
         try:
             image = Image.open(file_dict[fname])
-            st.markdown(f"<div style='position:relative; display:inline-block;'>"
-                        f"<img src='data:image/jpeg;base64,{image.convert('RGB').resize((150,150)).tobytes().hex()}' width='150' style='border:2px solid #0f0; border-radius:4px;'/>"
-                        f"<div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div></div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='position:relative; display:inline-block;'>"
+            image = image.convert("RGB").resize((150, 150))
+            image_bytes = io.BytesIO()
+            image.save(image_bytes, format="JPEG")
+            image_base64 = image_bytes.getvalue().hex()
+            st.markdown(f"""
+            <div style='position:relative; display:inline-block;'>
+                <img src='data:image/jpeg;base64,{image_base64}' width='150' style='border:2px solid #ccc; border-radius:4px;'/>
+                <div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px; cursor:pointer;'>🗑️</div>
+                <div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>
+            </div>""", unsafe_allow_html=True)"
             f"<img src='data:image/jpeg;base64,{image.convert('RGB').resize((150,150)).tobytes().hex()}' width='150' style='border:2px solid #0f0; border-radius:4px;'/>"
             f"<div style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>"
             f"<div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px; cursor:pointer;'>🗑️</div></div>", unsafe_allow_html=True)
@@ -108,6 +120,7 @@ if uploaded_files:
             for fname in ordered_filenames:
                 file = file_dict[fname]
                 img_path = os.path.join(tmpdir, file.name)
+                file.seek(0)
                 with open(img_path, "wb") as f:
                     f.write(file.read())
                 try:
