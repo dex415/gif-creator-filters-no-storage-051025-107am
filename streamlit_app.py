@@ -54,7 +54,9 @@ if uploaded_files:
     file_dict = {}
     for file in uploaded_files:
         try:
-            _ = Image.open(file).convert("RGB")  # Just open and convert to validate
+            img = Image.open(file)
+            img.load()
+            file.seek(0)  # Reset for later use
             file_dict[file.name] = file
         except Exception:
             st.warning(f"Skipping {file.name}: not a valid image.")
@@ -74,8 +76,30 @@ if uploaded_files:
         st.caption("(Final preview shown below before export)")
 
     for i, fname in enumerate(ordered_filenames):
+        confirm_key = f"confirm_remove_{i}"
+        if st.session_state.get(confirm_key):
+            continue
+
+        trash_clicked = st.button("🗑️", key=f"trash_{i}", help="Click to mark {fname} for removal")
+        if trash_clicked:
+            if st.confirm(f"Are you sure you want to remove '{fname}'?"):
+                st.session_state[confirm_key] = True
+                continue
         try:
-            st.image(Image.open(file_dict[fname]), width=150, caption=f"{i+1}. {fname}")
+            image = Image.open(file_dict[fname])
+            st.markdown(f"<div style='position:relative; display:inline-block;'>"
+                        f"<img src='data:image/jpeg;base64,{image.convert('RGB').resize((150,150)).tobytes().hex()}' width='150' style='border:2px solid #0f0; border-radius:4px;'/>"
+                        f"<div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div></div>", unsafe_allow_html=True)
+            st.markdown(f"<div style='position:relative; display:inline-block;'>"
+            f"<img src='data:image/jpeg;base64,{image.convert('RGB').resize((150,150)).tobytes().hex()}' width='150' style='border:2px solid #0f0; border-radius:4px;'/>"
+            f"<div style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>"
+            f"<div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px; cursor:pointer;'>🗑️</div></div>", unsafe_allow_html=True)
+st.image(image, width=150, caption=f"{i+1}. {fname}")
+        except UnidentifiedImageError:
+            st.markdown(f"<div style='position:relative; display:inline-block;'>"
+                        f"<div style='width:150px; height:150px; background:#fdd; display:flex; align-items:center; justify-content:center; border:2px solid #f00; border-radius:4px;'>"
+                        f"❌</div></div>", unsafe_allow_html=True)
+            st.warning(f"Could not display preview for: {fname}")
         except UnidentifiedImageError:
             st.warning(f"Could not display preview for: {fname}")
 
