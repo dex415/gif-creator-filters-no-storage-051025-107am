@@ -139,7 +139,7 @@ if uploaded_files:
                     w_percent = logo_width / float(logo.size[0])
                     logo_height = int(float(logo.size[1]) * w_percent)
                     logo = logo.resize((logo_width, logo_height), Image.LANCZOS)
-                    pos_x = watermark_margin
+                    pos_x = img_cropped.width - logo_width - watermark_margin
                     pos_y = img_cropped.height - logo_height - watermark_margin
                     img_cropped.paste(logo, (pos_x, pos_y), logo)
 
