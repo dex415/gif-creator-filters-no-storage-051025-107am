@@ -163,4 +163,4 @@ if uploaded_files:
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by TWNTY-TWO®️</div>", unsafe_allow_html=True)
-st.markdown("Want to publish this on social media? Copy your download and [head to Meta Creator Studio](https://business.facebook.com/creatorstudio) to share to Instagram or Threads."))
+st.markdown("Want to publish this on social media? Copy your download and [head to Meta Creator Studio](https://business.facebook.com/creatorstudio) to share to Instagram or Threads.")
