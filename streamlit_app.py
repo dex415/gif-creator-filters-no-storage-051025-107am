@@ -29,6 +29,13 @@ st.markdown("---")
 if preset == "Custom":
     duration = st.slider("Frame display time (seconds)", min_value=0.5, max_value=5.0, value=1.5, step=0.1)
     output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0)
+else:
+    if preset == "GIF (Short Reel)":
+        duration = 1.5
+        output_format = "GIF"
+    elif preset == "MP4 (Longer Reel)":
+        duration = 2.2
+        output_format = "MP4 (video)"
 
 
 st.subheader("Filters and Image Edits")
