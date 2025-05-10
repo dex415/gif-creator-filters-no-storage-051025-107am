@@ -21,13 +21,8 @@ st.markdown("""
 st.title("🧢 TWNTY-TWO GIF Creator")
 
 preset = st.selectbox("🎛️ Choose a preset", ["GIF (Short Reel)", "MP4 (Longer Reel)", "Custom"])
-if preset == "GIF (Short Reel)":
-    duration = 1.5
-    output_format = "GIF"
-elif preset == "MP4 (Longer Reel)":
-    duration = 2.2
-    output_format = "MP4 (video)"
 
+st.subheader("Upload Images")
 uploaded_files = st.file_uploader("Drag and drop or browse to upload images", accept_multiple_files=True, type=["png", "jpg", "jpeg"])
 
 st.subheader("Upload Images")
