@@ -133,7 +133,7 @@ if uploaded_files:
                     img_cropped = sepia
 
                 if add_watermark and os.path.exists(LOGO_PATH):
-    logo = Image.open(LOGO_PATH).convert("RGBA")
+                    logo = Image.open(LOGO_PATH).convert("RGBA")
     base_width = img_cropped.width
     logo_width = int(base_width * (watermark_size / 100))
     w_percent = (logo_width / float(logo.size[0]))
