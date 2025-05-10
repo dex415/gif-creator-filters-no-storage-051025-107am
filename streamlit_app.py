@@ -147,8 +147,6 @@ if uploaded_files:
             st.success(f"{output_format} created!")
             if output_format == "GIF":
                 st.image(output_path, caption="Preview", use_container_width=True)
-                if st.button("🔁 Replay GIF"):
-                    st.image(output_path, caption="Replay", use_container_width=True)
             else:
                 st.video(output_path)
                 if st.button("🔁 Replay Video"):
