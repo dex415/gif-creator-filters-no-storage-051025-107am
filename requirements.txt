@@ -1,0 +1,5 @@
+streamlit
+Pillow
+imageio
+moviepy
+streamlit-sortables
