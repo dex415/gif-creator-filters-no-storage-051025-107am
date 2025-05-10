@@ -162,5 +162,5 @@ if uploaded_files:
                 st.download_button(f"Download {output_format}", f, file_name=os.path.basename(output_path), mime=mime)
 
 st.markdown("---")
-st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by 🏵 Más Vida Agency 🏵 for TWNTY-TWO®️</div>", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by  🏵 Más Vida Agency 🏵  for TWNTY-TWO®️</div>", unsafe_allow_html=True)
 st.markdown("Want to publish this on social media? Copy your download and [head to Meta Creator Studio](https://business.facebook.com/creatorstudio) to share to Instagram or Threads.")
