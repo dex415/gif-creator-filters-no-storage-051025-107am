@@ -65,6 +65,10 @@ if uploaded_files:
     with col1:
         if st.button("Select All"):
             for i, fname in enumerate(ordered_filenames):
+                st.session_state[f"confirm_remove_{i}"] = False
+        if st.button("Clear All"):
+            for i, fname in enumerate(ordered_filenames):
+                st.session_state[f"confirm_remove_{i}"] = True
         confirm_key = f"confirm_remove_{i}"
         if st.session_state.get(confirm_key):
             continue
