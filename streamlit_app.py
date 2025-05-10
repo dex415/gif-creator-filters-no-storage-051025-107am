@@ -35,7 +35,10 @@ if preset == "Custom":
     output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0)
 
 add_watermark = st.checkbox("Add TWNTY-TWO logo watermark", value=True)
-watermark_size = st.slider("Watermark size (% of image width)", 5, 30, 15)
+if preset == "Custom":
+    watermark_size = st.slider("Watermark size (% of image width)", 5, 30, 15)
+else:
+    watermark_size = 15
 watermark_margin = 4  # fixed margin that looks good by default
 
 apply_bw = st.checkbox("Apply black & white filter")
@@ -146,3 +149,4 @@ if uploaded_files:
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; font-size: 0.9rem; color: #777;'>Made by <a href='https://masvida.agency' target='_blank' style='color: #777; text-decoration: none;'>🏵 Más Vida Agency 🏵 for TWNTY-TWO®️ </a></div>", unsafe_allow_html=True)
+
