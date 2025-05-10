@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image, ImageEnhance, UnidentifiedImageError
+from PIL import Image, ImageEnhance, ImageFilter, UnidentifiedImageError
 import os
 import tempfile
 import imageio
@@ -8,7 +8,7 @@ from moviepy.editor import ImageSequenceClip
 from datetime import datetime
 from streamlit_sortables import sort_items
 
-st.set_page_config(page_title="TWNTY-TWO GIF Creator", layout="centered")
+st.set_page_config(page_title="🧢 TWNTY-TWO GIF Creator", layout="centered")
 
 st.markdown("""
     <style>
@@ -19,23 +19,25 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.image("https://twnty-two-assets.s3.amazonaws.com/twnty-two-icon.png", width=100)
-st.title("TWNTY-TWO GIF Creator")
+st.title("🧢 TWNTY-TWO GIF Creator")
 st.markdown("""
 ### Level Up Your Drops
 Create looping visuals for your Friday and 22nd drops in seconds.
 """)
 
 uploaded_files = st.file_uploader("Drag and drop or browse to upload images", accept_multiple_files=True, type=["png", "jpg", "jpeg"])
-duration = st.slider("Frame display time (seconds)", min_value=0.5, max_value=5.0, value=1.5, step=0.1)
-output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"])
 
-preset = st.selectbox("🎛️ Choose a preset", ["None", "Friday Drop", "Promo Loop"])
-if preset == "Friday Drop":
+preset = st.selectbox("🎛️ Choose a preset", ["GIF (Short Reel)", "MP4 (Longer Reel)"])
+if preset == "GIF (Short Reel)":
     duration = 1.5
     output_format = "GIF"
-elif preset == "Promo Loop":
+elif preset == "MP4 (Longer Reel)":
     duration = 2.2
     output_format = "MP4 (video)"
+
+st.markdown("---")
+duration = st.slider("Frame display time (seconds)", min_value=0.5, max_value=5.0, value=duration, step=0.1)
+output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0 if output_format == "GIF" else 1)
 
 add_watermark = st.checkbox("Add TWNTY-TWO logo watermark", value=True)
 watermark_size = st.slider("Watermark size (% of image width)", 5, 30, 15)
@@ -43,6 +45,8 @@ watermark_margin = st.slider("Watermark margin (px)", 0, 50, 10)
 
 apply_bw = st.checkbox("Apply black & white filter")
 apply_contrast = st.checkbox("Boost contrast")
+apply_blur = st.checkbox("Apply soft blur")
+apply_sepia = st.checkbox("Apply sepia tone")
 
 LOGO_PATH = "logo.png"
 
@@ -50,8 +54,7 @@ if uploaded_files:
     file_dict = {}
     for file in uploaded_files:
         try:
-            img = Image.open(file)
-            img.verify()
+            _ = Image.open(file).convert("RGB")  # Just open and convert to validate
             file_dict[file.name] = file
         except Exception:
             st.warning(f"Skipping {file.name}: not a valid image.")
@@ -98,10 +101,22 @@ if uploaded_files:
 
                 if apply_bw:
                     img_cropped = img_cropped.convert("L").convert("RGB")
-
                 if apply_contrast:
                     enhancer = ImageEnhance.Contrast(img_cropped)
                     img_cropped = enhancer.enhance(1.5)
+                if apply_blur:
+                    img_cropped = img_cropped.filter(ImageFilter.GaussianBlur(radius=2))
+                if apply_sepia:
+                    sepia = Image.new("RGB", img_cropped.size)
+                    pixels = img_cropped.load()
+                    for y in range(img_cropped.size[1]):
+                        for x in range(img_cropped.size[0]):
+                            r, g, b = pixels[x, y]
+                            tr = int(0.393 * r + 0.769 * g + 0.189 * b)
+                            tg = int(0.349 * r + 0.686 * g + 0.168 * b)
+                            tb = int(0.272 * r + 0.534 * g + 0.131 * b)
+                            sepia.putpixel((x, y), (min(tr, 255), min(tg, 255), min(tb, 255)))
+                    img_cropped = sepia
 
                 if add_watermark and os.path.exists(LOGO_PATH):
                     logo = Image.open(LOGO_PATH).convert("RGBA")
