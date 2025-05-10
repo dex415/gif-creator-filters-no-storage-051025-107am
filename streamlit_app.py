@@ -84,7 +84,8 @@ if uploaded_files:
                 continue
 
         try:
-            image = Image.open(file_dict[fname]).convert("RGB").resize((150, 150))
+            image = Image.open(file_dict[fname]).convert("RGB")
+            image.thumbnail((150, 150))
             image_bytes = io.BytesIO()
             image.save(image_bytes, format="JPEG")
             image_base64 = image_bytes.getvalue().hex()
