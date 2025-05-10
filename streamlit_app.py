@@ -21,7 +21,6 @@ st.markdown("""
 st.image("https://twnty-two-assets.s3.amazonaws.com/twnty-two-icon.png", width=100)
 st.title("🧢 TWNTY-TWO GIF Creator")
 
-
 preset = st.selectbox("🎛️ Choose a preset", ["Custom", "GIF (Short Reel)", "MP4 (Longer Reel)"])
 if preset == "GIF (Short Reel)":
     duration = 1.5
@@ -35,15 +34,6 @@ uploaded_files = st.file_uploader("Drag and drop or browse to upload images", ac
 if preset == "Custom":
     duration = st.slider("Frame display time (seconds)", min_value=0.5, max_value=5.0, value=1.5, step=0.1)
     output_format = st.radio("Choose output format", ["GIF", "MP4 (video)"], index=0)
-
-preset = st.selectbox("🎛️ Choose a preset", ["GIF (Short Reel)", "MP4 (Longer Reel)"])
-if preset == "GIF (Short Reel)":
-    duration = 1.5
-    output_format = "GIF"
-elif preset == "MP4 (Longer Reel)":
-    duration = 2.2
-    output_format = "MP4 (video)"
-
 
 add_watermark = st.checkbox("Add TWNTY-TWO logo watermark", value=True)
 watermark_size = st.slider("Watermark size (% of image width)", 5, 30, 15)
@@ -62,7 +52,7 @@ if uploaded_files:
         try:
             img = Image.open(file)
             img.load()
-            file.seek(0)  # Reset for later use
+            file.seek(0)
             file_dict[file.name] = file
         except Exception:
             st.warning(f"Skipping {file.name}: not a valid image.")
@@ -73,13 +63,6 @@ if uploaded_files:
 
     st.markdown("**Drag images to sort their order:**")
     ordered_filenames = sort_items(list(file_dict.keys()))
-
-    col1, col2 = st.columns([1, 4])
-    with col1:
-        if st.button("Reset Order"):
-            ordered_filenames = list(file_dict.keys())
-    with col2:
-        st.caption("(Final preview shown below before export)")
 
     for i, fname in enumerate(ordered_filenames):
         confirm_key = f"confirm_remove_{i}"
@@ -97,23 +80,13 @@ if uploaded_files:
             image_bytes = io.BytesIO()
             image.save(image_bytes, format="JPEG")
             image_base64 = image_bytes.getvalue().hex()
-            image = image.convert("RGB").resize((150, 150))
-image_bytes = io.BytesIO()
-image.save(image_bytes, format="JPEG")
-image_base64 = image_bytes.getvalue().hex()
-
-st.markdown(f"""
-<div style='position:relative; display:inline-block; max-width: 100%; cursor: pointer;'>
-    <img src='data:image/jpeg;base64,{image_base64}' width='150' style='border:2px solid #ccc; border-radius:4px; transition: transform 0.3s; display:block; margin:0 auto;' onmouseover='this.style.transform=\"scale(1.2)\"' onmouseout='this.style.transform=\"scale(1)\"'/>
-    <div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px;'>🗑️</div>
-    <div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>
-</div>
-""", unsafe_allow_html=True)"
-                    except UnidentifiedImageError:
-            st.markdown(f"<div style='position:relative; display:inline-block;'>"
-                        f"<div style='width:150px; height:150px; background:#fdd; display:flex; align-items:center; justify-content:center; border:2px solid #f00; border-radius:4px;'>"
-                        f"❌</div></div>", unsafe_allow_html=True)
-            st.warning(f"Could not display preview for: {fname}")
+            st.markdown(f"""
+            <div style='position:relative; display:inline-block; max-width: 100%; cursor: pointer;'>
+                <img src='data:image/jpeg;base64,{image_base64}' width='150' style='border:2px solid #ccc; border-radius:4px; transition: transform 0.3s; display:block; margin:0 auto;' onmouseover='this.style.transform=\"scale(1.2)\"' onmouseout='this.style.transform=\"scale(1)\"'/>
+                <div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px;'>🗑️</div>
+                <div title='Valid image' style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>
+            </div>
+            """, unsafe_allow_html=True)
         except UnidentifiedImageError:
             st.warning(f"Could not display preview for: {fname}")
 
@@ -121,6 +94,8 @@ st.markdown(f"""
         with tempfile.TemporaryDirectory() as tmpdir:
             images = []
             for fname in ordered_filenames:
+                if st.session_state.get(f"confirm_remove_{ordered_filenames.index(fname)}"):
+                    continue
                 file = file_dict[fname]
                 img_path = os.path.join(tmpdir, file.name)
                 file.seek(0)
