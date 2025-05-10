@@ -94,7 +94,6 @@ if uploaded_files:
             f"<img src='data:image/jpeg;base64,{image.convert('RGB').resize((150,150)).tobytes().hex()}' width='150' style='border:2px solid #0f0; border-radius:4px;'/>"
             f"<div style='position:absolute; top:4px; right:8px; color:green; font-size:18px;'>✅</div>"
             f"<div title='Mark for removal' style='position:absolute; top:4px; left:8px; color:red; font-size:18px; cursor:pointer;'>🗑️</div></div>", unsafe_allow_html=True)
-st.image(image, width=150, caption=f"{i+1}. {fname}")
         except UnidentifiedImageError:
             st.markdown(f"<div style='position:relative; display:inline-block;'>"
                         f"<div style='width:150px; height:150px; background:#fdd; display:flex; align-items:center; justify-content:center; border:2px solid #f00; border-radius:4px;'>"
